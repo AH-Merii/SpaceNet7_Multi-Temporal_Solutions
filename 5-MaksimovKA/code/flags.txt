@@ -1,1 +1,0 @@
---ipc=host --shm-size 16G
