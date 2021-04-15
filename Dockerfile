@@ -93,10 +93,10 @@ RUN pip install scipy==1.3.2
 
 WORKDIR /work
 COPY . /work/
-RUN chmod 777 train.sh
-RUN chmod 777 test.sh
-RUN chmod 777 download.sh
-RUN chmod 777 pretrained_model/download_model.py 
+RUN chmod 777 src/model/util_scripts/train.sh
+RUN chmod 777 src/model/util_scripts/test.sh
+RUN chmod 777 src/model/util_scripts/download.sh
+RUN chmod 777 src/model/pretrained_model/download_model.py
 
 # open ports for jupyterlab and tensorboard
 EXPOSE 8888 6006
