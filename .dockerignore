@@ -1,0 +1,9 @@
+# Exclude everything:
+#
+*
+
+# Include the files that you want copied into the container
+#
+!data/
+!models/
+!src/
