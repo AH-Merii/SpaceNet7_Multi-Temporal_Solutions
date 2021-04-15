@@ -11,15 +11,15 @@ ARG solaris_branch='master'
 
 # prep apt-get and cudnn
 RUN apt-get update && apt-get install -y --no-install-recommends \
-	    apt-utils \
-            libcudnn7=$CUDNN_VERSION-1+cuda10.0 \
-            libcudnn7-dev=$CUDNN_VERSION-1+cuda10.0 && \
+    apt-utils \
+    libcudnn7=$CUDNN_VERSION-1+cuda10.0 \
+    libcudnn7-dev=$CUDNN_VERSION-1+cuda10.0 && \
     apt-mark hold libcudnn7 && \
     rm -rf /var/lib/apt/lists/*
 
 # install requirements
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
+    && apt-get install -y --no-install-recommends \
     bc \
     bzip2 \
     ca-certificates \
@@ -41,8 +41,8 @@ RUN apt-get update \
     vim \
     wget \
     build-essential \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 SHELL ["/bin/bash", "-c"]
 ENV PATH /opt/conda/bin:$PATH
@@ -67,29 +67,22 @@ RUN git clone https://github.com/cosmiq/solaris.git && \
     cd solaris && \
     git checkout ${solaris_branch} && \
     conda env create -f environment-gpu.yml
+
 ENV PATH /opt/conda/envs/solaris/bin:$PATH
 
-RUN cd solaris && pip install .
-
-# install various conda dependencies into the space_base environment
-RUN conda install -n solaris \
-                     jupyter \
-                     jupyterlab \
-                     ipykernel
-
-# add a jupyter kernel for the conda environment in case it's wanted
-RUN source activate solaris && python -m ipykernel.kernelspec \
-    --name solaris --display-name solaris
-
-# ensure solaris is activated
-# RUN conda activate solaris
-
-# Need imagecodecs for Planet files
-RUN pip install imagecodecs
-
-# Paddle
-RUN python3 -m pip install paddlepaddle-gpu==1.8.2.post107 -i https://mirror.baidu.com/pypi/simple
-RUN pip install scipy==1.3.2 
+RUN cd solaris && pip install . &&\
+    # install various conda dependencies into the space_base environment
+    conda install -n solaris &&\
+    # ensure solaris is activated
+    conda activate solaris && \
+    # Need imagecodecs for Planet files
+    pip install imagecodecs && \
+    # Paddle
+    python3 -m pip install paddlepaddle-gpu==1.8.2.post107 -i https://mirror.baidu.com/pypi/simple  && \
+    pip install scipy==1.3.2 && \
+    # Install AWS CLI in order to download models
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && ./aws/install && rm -rf awscliv2.zip ./aws/
 
 WORKDIR /work
 COPY . /work/
