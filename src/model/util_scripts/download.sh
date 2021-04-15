@@ -1,6 +1,5 @@
 #!/bin/bash
-
-mkdir -p /wdata/saved_model/hrnet/
-wget https://www.dropbox.com/s/krtl5tmrkf4qv56/prefix.tar.gz?dl=1 -O prefix.tar.gz
+# donwload model weights from s3 bucket
+mkdir -p /work/models/
+aws s3 cp s3://spacenet-dataset/spacenet-model-weights/spacenet-7/1-lxastro0/weights/ /work/models/ --recursive --no-sign-request
 tar -zxf prefix.tar.gz
-cp -r prefix /wdata/saved_model/hrnet/best_model
