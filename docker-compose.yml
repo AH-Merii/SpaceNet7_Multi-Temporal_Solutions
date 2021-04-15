@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  model:
+    tty: true
+    build: .
+    ports:
+      # jupyterlab
+      - "8888:8888"
+      # tensorboard
+      - "6006:6006"
+    volumes:
+      - ./data/input_data:/data
+      - ./data/output_data:/wdata:ro
